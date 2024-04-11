@@ -11,8 +11,8 @@
 </head>
 <body>
     <div class="container col-md-4 mt-5">
-        <h1 class="text-center text-primary">LOGIN</h1>
-        <form method="post" action="<%=request.getContextPath() + UrlUtils.LOGIN%>">
+        <h1 class="text-center text-primary">REGISTER</h1>
+        <form method="post" action="<%= request.getContextPath() + UrlUtils.REGISTER %>">
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
                 <input type="text" name="username" placeholder="Input your username" class="form-control" id="username" aria-describedby="emailHelp">
@@ -21,7 +21,11 @@
                 <label for="password" class="form-label">Password</label>
                 <input type="password" name="password" placeholder="Input your password" class="form-control" id="password">
             </div>
-            <div class="mb-3"><a href="<%=request.getContextPath() + UrlUtils.REGISTER%>"> Have no account? Register </a></div>
+            <div class="mb-3">
+                <label for="confirmPassword" class="form-label">Password</label>
+                <input type="password" name="confirmPassword" placeholder="Retype your password" class="form-control" id="confirmPassword">
+            </div>
+            <div class="mb-3"><a href="<%=request.getContextPath() + UrlUtils.LOGIN%>"> Have account? Login </a></div>
 
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>

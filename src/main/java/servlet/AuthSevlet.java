@@ -12,12 +12,24 @@ import utils.UrlUtils;
 
 import java.io.IOException;
 
-@WebServlet(urlPatterns = UrlUtils.LOGIN)
+@WebServlet(urlPatterns = {UrlUtils.LOGIN, UrlUtils.REGISTER, UrlUtils.LOGOUT})
 public class AuthSevlet extends HttpServlet {
     AuthService authService = new AuthService();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher(JspUtils.LOGIN).forward(req,resp);
+        switch (req.getServletPath()) {
+            case UrlUtils.LOGIN:
+                req.getRequestDispatcher(JspUtils.LOGIN).forward(req,resp);
+                break;
+            case UrlUtils.REGISTER:
+                req.getRequestDispatcher(JspUtils.REGISTER).forward(req, resp);
+                break;
+            case UrlUtils.LOGOUT:
+                req.getSession().invalidate();
+                resp.sendRedirect(req.getContextPath() + UrlUtils.LOGIN);
+                break;
+        }
+
     }
 
     @Override
@@ -36,6 +48,22 @@ public class AuthSevlet extends HttpServlet {
                     resp.sendRedirect(req.getContextPath() + UrlUtils.GAME);
                 }
                 break;
+            case UrlUtils.REGISTER:
+                username = req.getParameter("username");
+                password = req.getParameter("password");
+                String confirmPassword = req.getParameter("confirmPassword");
+
+                if(!password.equals(confirmPassword)) {
+                    req.setAttribute("errors", "Password and confirm are not matched");
+                    req.getRequestDispatcher(JspUtils.REGISTER).forward(req, resp);
+                }
+                String result = authService.register(username, password);
+                if("Success".equals(result)) {
+                    resp.sendRedirect(req.getContextPath() + UrlUtils.LOGIN);
+                } else {
+                    req.setAttribute("errors", result);
+                    req.getRequestDispatcher(JspUtils.REGISTER).forward(req, resp);
+                }
             default:
                 break;
         }
