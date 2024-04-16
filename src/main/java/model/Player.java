@@ -18,10 +18,13 @@ public class Player {
     }
 
     public String getPassword() {
+        //tien xu li du lieu
         return password;
     }
 
     public void setPassword(String password) {
+        //validate data
+        //ma hoa password
         this.password = password;
     }
 }

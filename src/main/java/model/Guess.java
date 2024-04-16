@@ -8,6 +8,20 @@ public class Guess {
     private String gameID;
     private int guessResult;
 
+    public Guess(int guessNumber, String gameID, int guessResult) {
+        this.guessNumber = guessNumber;
+        this.gameID = gameID;
+        this.guessResult = guessResult;
+        this.guessTime = LocalDateTime.now();
+    }
+
+    public Guess(int guessNumber, LocalDateTime guessTime, String gameID, int guessResult) {
+        this.guessNumber = guessNumber;
+        this.guessTime = guessTime;
+        this.gameID = gameID;
+        this.guessResult = guessResult;
+    }
+
     public int getGuessNumber() {
         return guessNumber;
     }
