@@ -36,6 +36,8 @@ public class GameService {
         if (game == null) throw new Exception("Game is not exist");
         game.getGuessList().addAll(guessRepository.getGuessListByGameID(gameID));
 
+        if (game.isComplete()) return game;
+
         int guessResult;
         if (guessNumber > game.getTargetNumber()) {
             guessResult = 1;

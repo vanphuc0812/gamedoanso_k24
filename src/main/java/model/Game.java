@@ -16,6 +16,8 @@ public class Game {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private boolean isActive;
+    private long playTime;
+    private long guessTimes;
 
     public Game(String username) {
         this.username = username;
@@ -93,6 +95,22 @@ public class Game {
 
     public void setGuessList(List<Guess> guessList) {
         this.guessList = guessList;
+    }
+
+    public long getPlayTime() {
+        return playTime;
+    }
+
+    public void setPlayTime(long playTime) {
+        this.playTime = playTime;
+    }
+
+    public long getGuessTimes() {
+        return guessTimes;
+    }
+
+    public void setGuessTimes(long guessTimes) {
+        this.guessTimes = guessTimes;
     }
 
     public List<Guess> getGuessListReversed() {

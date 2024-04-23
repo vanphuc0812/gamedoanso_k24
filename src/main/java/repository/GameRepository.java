@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameRepository extends AbtractRepository<Game> {
     public void save(Game game) {
@@ -90,4 +92,45 @@ public class GameRepository extends AbtractRepository<Game> {
             return null;
         }));
     }
+
+    public List<Game> getTopByPlayTime(int top) {
+        return executeQueryList((connection -> {
+            List<Game> listRank = new ArrayList<>();
+            String sql = "select game.*, TIMESTAMPDIFF(SECOND, startTime, endTime) AS PLAYTIME " +
+                    "from game " +
+                    "WHERE isComplete = 1 " +
+                    "ORDER BY TIMESTAMPDIFF(SECOND, startTime, endTime) " +
+                    "LIMIT ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, top);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Game game = getGameModelFromResultSet(resultSet);
+                game.setPlayTime(resultSet.getInt("PLAYTIME"));
+                listRank.add(game);
+            }
+            return listRank;
+        }));
+    }
+
+    public List<Game> getTopByGuessTimes(int top) {
+        return executeQueryList((connection -> {
+            List<Game> listRank = new ArrayList<>();
+            String sql = "select game.*, COUNT(guess.guessNumber) as GUESSTIMES from game " +
+                    "    inner join guess ON game.gameID = guess.gameID " +
+                    "    GROUP BY game.gameID " +
+                    "    ORDER BY GUESSTIMES " +
+                    "    LIMIT ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, top);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Game game = getGameModelFromResultSet(resultSet);
+                game.setGuessTimes(resultSet.getInt("GUESSTIMES"));
+                listRank.add(game);
+            }
+            return listRank;
+        }));
+    }
+
 }
