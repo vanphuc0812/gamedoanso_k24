@@ -20,8 +20,15 @@ public class GameService {
         return newGame;
     }
 
-    public Game loadGame(String username) {
-        Game game = gameRepository.getActiveGameByUsername(username);
+    public Game loadGame(String username, String gameID) {
+        Game game = gameRepository.getGameByGameID(gameID);
+        if (game != null) {
+            gameRepository.deactiveAllGame(username);
+            gameRepository.activeGameByGameID(gameID);
+        } else {
+            game = gameRepository.getActiveGameByUsername(username);
+        }
+
         if (game != null) {
             List<Guess> list = guessRepository.getGuessListByGameID(game.getGameID());
             game.getGuessList().addAll(list);
@@ -54,5 +61,9 @@ public class GameService {
         guessRepository.save(guess);
         game.getGuessList().add(guess);
         return game;
+    }
+
+    public List<Game> getGameByUsername(String username) {
+        return gameRepository.getGameByUsername(username);
     }
 }

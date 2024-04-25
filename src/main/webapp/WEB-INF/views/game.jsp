@@ -4,6 +4,7 @@
 <%@ page import="model.Player" %>
 <%@ page import="model.Game" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ page import="utils.JspUtils" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -17,7 +18,7 @@
 <body>
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="<%=request.getContextPath()+UrlUtils.HOME%>">
             <h3 class="mb-0">Nestech</h3>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
@@ -26,9 +27,13 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <a class="nav-link active" aria-current="page" href="#">Home</a>
-                <a class="nav-link" href="#">Game</a>
-                <a class="nav-link" href="<%=request.getContextPath() + UrlUtils.RANK%>">Rank</a>
+                <a class="nav-link <%=request.getServletPath().equals(JspUtils.HOME) ? "active" : ""%>"
+                   aria-current="page"
+                   href="<%=request.getContextPath() + UrlUtils.HOME%>">Home</a>
+                <a class="nav-link <%=request.getServletPath().equals(JspUtils.GAME) ? "active" : ""%>"
+                   href="<%=request.getContextPath() + UrlUtils.GAME%>">Game</a>
+                <a class="nav-link <%=request.getServletPath().equals(JspUtils.RANK) ? "active" : ""%>"
+                   href="<%=request.getContextPath() + UrlUtils.RANK%>">Rank</a>
             </div>
         </div>
         <div class="dropdown">

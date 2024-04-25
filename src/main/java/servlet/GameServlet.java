@@ -13,20 +13,24 @@ import utils.UrlUtils;
 
 import java.io.IOException;
 
-@WebServlet(urlPatterns = {UrlUtils.GAME, UrlUtils.NEW_GAME})
+@WebServlet(urlPatterns = {UrlUtils.GAME, UrlUtils.NEW_GAME, UrlUtils.GAMEID})
 public class GameServlet extends HttpServlet {
     GameService gameService = new GameService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        switch (req.getServletPath()) {
-            case UrlUtils.GAME:
-                Player player = (Player) req.getSession().getAttribute("currentUser");
-                Game game = gameService.loadGame(player.getUsername());
-                req.setAttribute("game", game);
-                req.getRequestDispatcher(JspUtils.GAME).forward(req, resp);
-                break;
-        }
+        System.out.println(req.getRequestURI());
+
+//        String gameID = req.getParameter("gameID");
+        String gameID = req.getRequestURI()
+                .replace(req.getContextPath() + UrlUtils.GAME, "")
+                .replace("/", "");
+        System.out.println(gameID);
+        Player player = (Player) req.getSession().getAttribute("currentUser");
+        Game game = gameService.loadGame(player.getUsername(), gameID);
+        req.setAttribute("game", game);
+        req.getRequestDispatcher(JspUtils.GAME).forward(req, resp);
+
     }
 
     @Override
@@ -40,7 +44,7 @@ public class GameServlet extends HttpServlet {
                 break;
             case UrlUtils.GAME:
                 String gameID = req.getParameter("gameID");
-                int guessNumber = Integer.valueOf(req.getParameter("guessNumber"));
+                int guessNumber = Integer.parseInt(req.getParameter("guessNumber"));
 
                 try {
                     Game game = gameService.processGame(gameID, guessNumber);

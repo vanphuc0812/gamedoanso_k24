@@ -11,6 +11,9 @@ public class RankService {
     public List<Game> getTopByPlayTime(int top) {
         return gameRepository.getTopByPlayTime(top);
     }
-    // write function getTopByGuessTimes
 
+    // write function getTopByGuessTimes
+    public List<Game> getTopByGuessTimes(int top) {
+        return gameRepository.getTopByGuessTimes(top);
+    }
 }

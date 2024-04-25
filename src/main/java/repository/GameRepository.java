@@ -38,6 +38,17 @@ public class GameRepository extends AbtractRepository<Game> {
         }));
     }
 
+    public void activeGameByGameID(String gameID) {
+        executeUpdate((connection -> {
+            String sql = "UPDATE game SET isActive = 1 WHERE gameID = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, gameID);
+
+            statement.executeUpdate();
+            return null;
+        }));
+    }
+
     public Game getActiveGameByUsername(String username) {
         return executeQuery((connection -> {
             String sql = "SELECT * FROM game where username = ? and isActive = 1";
@@ -57,7 +68,7 @@ public class GameRepository extends AbtractRepository<Game> {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, gameID);
             ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
+            if (resultSet.next()) {
                 return getGameModelFromResultSet(resultSet);
             }
             return null;
@@ -76,8 +87,8 @@ public class GameRepository extends AbtractRepository<Game> {
         else endTime = null
         */
         LocalDateTime endTime = endTimeInTimestamp == null ? null : endTimeInTimestamp.toLocalDateTime();
-        boolean isComplete = resultSet.getInt("isComplete") == 1 ? true : false;
-        boolean isActive = resultSet.getInt("isActive") == 1 ? true : false;
+        boolean isComplete = resultSet.getInt("isComplete") == 1;
+        boolean isActive = resultSet.getInt("isActive") == 1;
         return new Game(gameID, username, targetNumber, isComplete, startTime, endTime, isActive);
     }
 
@@ -118,6 +129,7 @@ public class GameRepository extends AbtractRepository<Game> {
             List<Game> listRank = new ArrayList<>();
             String sql = "select game.*, COUNT(guess.guessNumber) as GUESSTIMES from game " +
                     "    inner join guess ON game.gameID = guess.gameID " +
+                    "    WHERE game.isComplete = 1 " +
                     "    GROUP BY game.gameID " +
                     "    ORDER BY GUESSTIMES " +
                     "    LIMIT ?";
@@ -130,6 +142,21 @@ public class GameRepository extends AbtractRepository<Game> {
                 listRank.add(game);
             }
             return listRank;
+        }));
+    }
+
+    public List<Game> getGameByUsername(String username) {
+        return executeQueryList((connection -> {
+            List<Game> gameList = new ArrayList<>();
+            String sql = "SELECT * FROM game where username = ? ";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, username);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Game game = getGameModelFromResultSet(resultSet);
+                gameList.add(game);
+            }
+            return gameList;
         }));
     }
 

@@ -46,68 +46,46 @@
     </div>
 </nav>
 
-<div class="container ">
-    <div class="row justify-content-center">
-        <h1 class=" text-center text-primary mt-5 mb-5">RANK</h1>
-    </div>
+<div class="container">
+    <table class="table table-clickable">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Game ID</th>
+            <th scope="col">Start Time</th>
+            <th scope="col">End Time</th>
+            <th scope="col">Is Complete</th>
+            <th scope="col">Is Active</th>
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach var="game" items="${listGame}" varStatus="loop">
+            <tr data-href="<%=request.getContextPath() + UrlUtils.GAME + "/" %>${game.getGameID()}">
+                <th scope="row">${listGame.indexOf(game) + 1}</th>
+                <td>${game.getGameID()}</td>
+                <td>${game.getStartTime()}</td>
+                <td>${game.getEndTime()}</td>
+                <td>${game.isComplete()}</td>
+                <td>${game.isActive()}</td>
+            </tr>
+        </c:forEach>
 
-    <div class="row justify-content-around">
-        <div class="col-5">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Game ID</th>
-                    <th scope="col">Username</th>
-                    <th scope="col">Target Number</th>
-                    <th scope="col">Play Time</th>
-                </tr>
-                </thead>
-                <tbody>
-                <c:forEach var="game" items="${listRankByPlayTime}" varStatus="loop">
-                    <tr>
-                        <th scope="row">${listRankByPlayTime.indexOf(game) + 1}</th>
-                        <td>${game.getGameID()}</td>
-                        <td>${game.getUsername()}</td>
-                        <td>${game.getTargetNumber()}</td>
-                        <td>${game.getPlayTime()}</td>
-                    </tr>
-                </c:forEach>
-
-                </tbody>
-            </table>
-        </div>
-
-        <div class="col-5">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Game ID</th>
-                    <th scope="col">Username</th>
-                    <th scope="col">Target Number</th>
-                    <th scope="col">Guess Times</th>
-                </tr>
-                </thead>
-                <tbody>
-                <c:forEach var="game" items="${listRankByGuessTimes}" varStatus="loop">
-                    <tr>
-                        <th scope="row">${listRankByGuessTimes.indexOf(game) + 1}</th>
-                        <td>${game.getGameID()}</td>
-                        <td>${game.getUsername()}</td>
-                        <td>${game.getTargetNumber()}</td>
-                        <td>${game.getGuessTimes()}</td>
-                    </tr>
-                </c:forEach>
-
-                </tbody>
-            </table>
-        </div>
-    </div>
+        </tbody>
+    </table>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
+<script>
+    const tableRows = document.querySelectorAll(".table-clickable tbody tr");
+
+    for (const tableRow of tableRows) {
+        tableRow.addEventListener("click", function () {
+            // window.open(this.dataset.href, "_blank");
+            window.location.href = this.dataset.href;
+        });
+    }
+</script>
 </body>
 </html>

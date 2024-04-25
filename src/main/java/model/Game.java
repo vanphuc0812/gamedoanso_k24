@@ -45,16 +45,8 @@ public class Game {
         return gameID;
     }
 
-    public void setGameID(String gameID) {
-        this.gameID = gameID;
-    }
-
     public int getTargetNumber() {
         return targetNumber;
-    }
-
-    public void setTargetNumber(int targetNumber) {
-        this.targetNumber = targetNumber;
     }
 
     public boolean isComplete() {
@@ -67,10 +59,6 @@ public class Game {
 
     public LocalDateTime getStartTime() {
         return startTime;
-    }
-
-    public void setStartTime(LocalDateTime startTime) {
-        this.startTime = startTime;
     }
 
     public LocalDateTime getEndTime() {
@@ -93,9 +81,6 @@ public class Game {
         return guessList;
     }
 
-    public void setGuessList(List<Guess> guessList) {
-        this.guessList = guessList;
-    }
 
     public long getPlayTime() {
         return playTime;
@@ -113,9 +98,16 @@ public class Game {
         this.guessTimes = guessTimes;
     }
 
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
     public List<Guess> getGuessListReversed() {
-        List<Guess> tempList = new ArrayList<>();
-        tempList.addAll(guessList);
+        List<Guess> tempList = new ArrayList<>(guessList);
         Collections.reverse(tempList);
         return tempList;
     }

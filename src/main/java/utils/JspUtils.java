@@ -5,4 +5,5 @@ public class JspUtils {
     public static final String REGISTER = "/WEB-INF/views/register.jsp";
     public static final String GAME = "/WEB-INF/views/game.jsp";
     public static final String RANK = "/WEB-INF/views/rank.jsp";
+    public static final String HOME = "/WEB-INF/views/home.jsp";
 }
